@@ -1,0 +1,49 @@
+<?php
+// Database connection details
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "reminder";
+
+// Create a connection to the database
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve data from the database
+$sql = "SELECT * FROM reminderstb";
+$result = $conn->query($sql);
+
+// Check if any rows were returned
+if ($result->num_rows > 0) {
+    // Generate HTML table header
+    echo "<table>";
+    echo "<tr><th>Date</th><th>Event Details</th><th>Time</th><th>Email</th><th>Event Reminder</th><th>Bill Reminder</th><th>Update</th><th>Delete</th></tr>";
+
+    // Loop through each row of data
+    while ($row = $result->fetch_assoc()) {
+        // Output data into table rows
+        echo "<tr>";
+        echo "<td>" . $row["date"] . "</td>";
+        echo "<td>" . $row["event_details"] . "</td>";
+        echo "<td>" . $row["time"] . "</td>";
+        echo "<td>" . $row["email"] . "</td>";
+        echo "<td>" . $row["event_reminder"] . "</td>";
+        echo "<td>" . $row["bill_reminder"] . "</td>";
+        echo "<td><button onclick='updateReminder(" . $row["id"] . ")'>Update</button></td>";
+        echo "<td><button onclick='deleteReminder(" . $row["id"] . ")'>Delete</button></td>";
+        echo "</tr>";
+    }
+
+    // Close the table
+    echo "</table>";
+} else {
+    echo "No data found.";
+}
+
+// Close the database connection
+$conn->close();
+?>
